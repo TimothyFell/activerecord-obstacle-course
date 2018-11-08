@@ -59,7 +59,7 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
-    order_id = Order.order(id: :asc).limit(1).first.id
+    order_id = Order.order(amount: :asc).limit(1).first.id
     # ------------------------------------------------------------
 
     # Expectation
@@ -73,7 +73,7 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
-    order_id = Order.order(id: :desc).limit(1).first.id
+    order_id = Order.order(amount: :desc).limit(1).first.id
     # ------------------------------------------------------------
 
     # Expectation
@@ -160,7 +160,7 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
-    orders_less_than_550 = Order.where(amount: 0..549)
+    orders_less_than_550 = Order.where('amount < 550')
     # ------------------------------------------------------------
 
     # Expectation
@@ -248,8 +248,7 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
-    order = Order.find_by(id: 3)
-    grouped_items = order.items.order(name: :asc)
+    grouped_items = Order.find_by(id: 3).items.order(name: :asc)
     # ------------------------------------------------------------
 
     # Expectation
@@ -300,7 +299,8 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
-    names = Order.select('items.*').joins(:items).pluck(:name)
+    # names = Order.select('items.*').joins(:items).pluck(:name)
+    names = Item.joins(:orders).pluck(:name)
     # ------------------------------------------------------------
 
     # Expectation
@@ -330,7 +330,7 @@ describe 'ActiveRecord Obstacle Course' do
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
-    users = User.joins(:orders, :order_items)
+    users = User.joins(:order_items)
     .where('order_items.item_id = ?', item_8.id)
     .group(:name)
     .pluck(:name)
